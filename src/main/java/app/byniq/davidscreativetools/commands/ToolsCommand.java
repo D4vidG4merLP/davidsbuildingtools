@@ -68,21 +68,25 @@ public class ToolsCommand {
                                                 return 0;
                                             }
 
-                                            String name = StringArgumentType.getString(context, "name");
-                                            Component displayName = Component.literal(name);
+                                            String rawName = StringArgumentType.getString(context, "name");
+                                            Component coloredName = Component.literal(translateColorCodes(rawName));
 
-                                            item.setHoverName(displayName);
+                                            item.setHoverName(coloredName);
 
                                             source.sendSuccess(() ->
-                                                    Component.literal("Renamed item to: ").append(displayName), true
+                                                    Component.literal("Renamed item to: ").append(coloredName), true
                                             );
 
                                             return 1;
                                         })
                                 ))
-
                         );
     }
+
+    private static String translateColorCodes(String input) {
+        return input.replaceAll("&([0-9a-fklmnor])", "§$1");
+    }
+
 
     public static void setSpawningEnabled(EntityType<?> entityType, boolean enabled) {
         entitySpawnToggles.put(entityType, enabled);
